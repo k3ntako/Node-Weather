@@ -17,16 +17,12 @@ const argv = yargs
   .alias('help', 'h')
   .argv;
 
-geocode.geocodeAddress(argv.address, (errorMessage, results) => {
-  if(errorMessage){
+geocode.geocodeAddress(argv.address).then((location) => {
+  darksky.getWeather(location).then((weather) => {
+    console.log(weather);
+  }, (errorMessage) =>{
     console.log(errorMessage);
-  }else{
-    darksky.getWeather(results, (errorMessage, results) => {
-      if(errorMessage){
-        console.log(errorMessage);
-      }else {
-        console.log(results);
-      }
-    });
-  }
+  });
+}, (errorMessage) =>{
+  console.log(errorMessage);
 });
